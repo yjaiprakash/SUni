@@ -1,0 +1,194 @@
+<%- include('./../partials/upper.ejs',{title:'Profile'}) %>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
+      integrity="sha512-0p3K0H3S6Q4bEWZ/WmC94Tgit2ular2/n0ESdfEX8l172YyQj8re1Wu9s/HT9T/T2osUw5Gx/6pAZNk3UKbESw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="/assets/css/user/user.css" />
+  </head>
+  <body class="fullprof" style="background-color: rgba(221, 221, 221, 0.7)">
+    <nav class="navbar navbar-dark bg-dark navbar-expand-md">
+      <div class="container">
+        <a class="navbar-brand" href="#">
+          <span class="mb-0 h1">SUni</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <form method="GET" action="/search" class="d-flex">
+              <input
+                class="form-control-sm me-2"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                name="query"
+              />
+              <button class="btn btn-outline-light btn-sm" type="submit">
+                Search
+              </button>
+            </form>
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/profile/<%= loggedIn %>">Profile</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDarkDropdownMenuLink"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+              </a>
+              <ul
+                class="dropdown-menu dropdown-menu-dark"
+                aria-labelledby="navbarDarkDropdownMenuLink"
+              >
+                <li><a class="dropdown-item" href="/new">New Post</a></li>
+                <li><a class="dropdown-item" href="/settings">Settings</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" href="/auth/logout">Log Out</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    
+    <!-- Welcome <%= user.username %>
+    <form action="/auth/deleteaccount" method="POST">
+      <input type="hidden" name="username" value="<%= user.username %>" />
+      <button type="submit">Delete account</button>
+    </form> -->
+
+    <div class="container text-center mb-4 mt-3">
+      <img
+        src="<%= user.profileUrl %>"
+        alt="<%= user.fullname %>"
+        style="
+          border: 0.1px solid grey;
+          object-fit: cover;
+          border-radius: 50%;
+          height: 35vh;
+          width: 20vw;
+          box-shadow: 0.5vh 0.5vh blue;
+        "
+      />
+    </div>
+
+    <div class="profimg container" style="width: 50%;">
+      <div class="topprof row">
+        <div class="col-md">
+          <h3>
+            <%= user.fullname %> <% if (loggedIn!=user.username) { %>
+            <button
+              type="button"
+              class="btn btn-sm btn-info float-end"
+              value="<%= user._id %>"
+            >
+              <%if(follows){%> Unfollow <% } else { %> Follow <% } %>
+            </button>
+            <% } %>
+          </h3>
+          <h4>
+            <a
+              href="/profile/<%= user.username %>"
+              style="color: rgb(145, 145, 145); text-decoration: none"
+              ><%= user.username %></a
+            >
+          </h4>
+          <div class="profstats d-flex justify-content-between mt-3">
+            <h5><%= user.accountStats.posts %> Posts</h5>
+            <h5><%= user.accountStats.followers %> Followers</h5>
+            <h5><%= user.accountStats.following %> Following</h5>
+          </div>
+        </div>
+        <div class="profbio col-md"><%= user.userBio %></div>
+      </div>
+    </div>
+    <hr class="dropdown-divider" />
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <% for( let index = 0; index < posts.length; index++ ) { %>
+          <a href="/posts/<%= posts[index]._id %>" target="_blank">
+            <img
+              src="<%= posts[index].imgUrl %>"
+              alt="<%= posts[index].caption %>"
+              style="height: 200px; border-radius: 10%; margin: 2%"
+            />
+          </a>
+          <% } %>
+        </div>
+      </div>
+    </div>
+
+    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/axios/axios.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"
+      integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      document
+        .querySelectorAll(
+          'button[type=button][class="btn btn-sm btn-info float-end"]'
+        )
+        .forEach((x) => {
+          x.addEventListener('click', (e) => {
+            // console.log(e.target.value);
+            // e.target.innerText = 'Following';
+            axios
+              .post('/async/follow', {
+                userIdToFollow: e.target.value,
+              })
+              .then((res) => {
+                if (res.data.follow) {
+                  return (e.target.innerText = 'Unfollow');
+                }
+                if (!res.data.follow) {
+                  return (e.target.innerText = 'Follow');
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
+        });
+
+      const updateBool = '<%= update %>';
+      console.log(updateBool);
+      if (updateBool == 1) {
+        new Noty({
+          type: 'success',
+          theme: 'metroui',
+          text: 'Profile Updated',
+          timeout: 3000,
+        }).show();
+      }
+    </script>
+  </body>
+</html>

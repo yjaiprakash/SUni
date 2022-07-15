@@ -1,0 +1,14 @@
+#loginForm {
+  margin-top: 2vh;
+  border: 2px solid #5e5e5e;
+  padding: 2rem;
+  border-radius: 25px;
+  width: 35%;
+  -webkit-box-shadow: 1vw 1vw #40405c;
+          box-shadow: 1vw 1vw #40405c;
+}
+
+#loginForm .login_img img {
+  max-width: 100%;
+}
+/*# sourceMappingURL=login.css.map */

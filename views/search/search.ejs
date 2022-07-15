@@ -1,0 +1,19 @@
+<%- include('./../partials/upper.ejs',{title:'Search Results'}) %>
+<link rel="stylesheet" href="/assets/css/search/search.css" />
+</head>
+  <body style="background-color: rgba(242, 240, 238, 0.7)">
+    <%- include('./../partials/navbar2.ejs') %>
+    <div class="container">
+      <h2>Search Results</h2>
+    </div>
+    <main>
+      <div class="container">
+        <% searchResults.forEach(x => { %>
+        <div class="usernames my-2"><ul><%= x.firstname + ' ' + x.lastname %></ul></div>
+        <% }) %>
+      </div>
+    </main>
+
+    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

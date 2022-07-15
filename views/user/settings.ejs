@@ -1,0 +1,288 @@
+<%- include('./../partials/upper.ejs',{title:'Suni | ' + user.fullname+ ' | Edit'}) %>
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css"
+      integrity="sha512-0p3K0H3S6Q4bEWZ/WmC94Tgit2ular2/n0ESdfEX8l172YyQj8re1Wu9s/HT9T/T2osUw5Gx/6pAZNk3UKbESw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Suni | <%= user.firstname %></title>
+    <link rel="stylesheet" href="/assets/css/user/user.css" />
+  </head>
+  <body class="fullprof" style="background-color: rgba(255, 255, 255, 0.7)">
+    <%- include('./../partials/navbar2.ejs') %>
+
+    <!-- Welcome <%= user.username %>
+    <form action="/auth/deleteaccount" method="POST">
+      <input type="hidden" name="username" value="<%= user.username %>" />
+      <button type="submit">Delete account</button>
+    </form> -->
+    <form class="profform" action="/settings" method="post" enctype="multipart/form-data">
+      <div class="profformimg container text-center mb-4 mt-3">
+        <img
+          id="uploaded"
+          src="<%= user.profileUrl %>"
+          alt="<%= user.fullname %>"
+          style="
+            border: 0.1px solid grey;
+            object-fit: cover;
+            border-radius: 50%;
+            /* height: 150px; */
+            width: 90%;
+            margin-top: 10vh;
+            margin-bottom: 5vh;
+          "
+        />
+        <br />
+        <input
+          type="file"
+          name="image"
+          id="image"
+          onchange="displayImg(this)"
+        />
+      </div>
+
+      <div class="profformdata container" style="width: 50%;">
+        <div class="topprof row">
+          <div class="col-md" style="text-align: left;">
+            <h4>
+              <span>
+                <div class="inforows">
+                  <label for="">First Name</label>
+                  <input
+                  type="text"
+                  name="firstname"
+                  id="firstname"
+                  value="<%= user.firstname %>"
+                />
+                </div>
+                <div class="inforows">
+                  <label for="">Last Name</label>
+                  <input
+                    type="text"
+                    name="lastname"
+                    id="lastname"
+                    value="<%= user.lastname %>"
+                  />
+                </div>
+              </span>
+              <!-- <input
+                type="text"
+                name="firstname"
+                id="firstname"
+                value="<%= user.firstname %>"
+              /> -->
+              <!-- <input
+                type="text"
+                name="lastname"
+                id="lastname"
+                value="<%= user.lastname %>"
+              /> -->
+            </h4>
+            <h4>
+              <input
+                type="checkbox"
+                name="changeUsername"
+                class="form-check-input"
+                id="changeUsername"
+              />
+              <label for="changeUsername" class="mb-2">Change Username ?</label>
+              <br />
+              <div class="inforows">
+                <label for="">UserName</label>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  value="<%= user.username %>"
+                />
+              </div>
+              <!-- <label for="">UserName</label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                value="<%= user.username %>"
+              /> -->
+            </h4>
+            <div class="postdata d-flex justify-content-between mt-3">
+              <h5><%= user.accountStats.posts %> Posts</h5>
+              <h5><%= user.accountStats.followers %> Followers</h5>
+              <h5><%= user.accountStats.following %> Following</h5>
+            </div>
+          </div>
+          <div class="col-md">
+            <textarea
+              name="bio"
+              id="bio"
+              maxlength="400"
+              style="width: 100%; height: 100%; resize: none"
+            >
+<%= user.userBio %></textarea
+            >
+          </div>
+          <button type="submit" class="btn btn-lg my-4 btn-secondary">
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
+    <hr>
+    <div class="container">
+      <div class="row">
+        <div class="col-6 d-flex justify-content-between">
+          <% if (user.is2FAEnabled) { %>
+            Disable 2-Factor-Authentication
+              <button class="btn btn-danger btn-sm" type="submit" id="disable2fa">Disable</button>
+            <% } else { %>
+          Enable 2-Factor-Authentication
+          <form action="/auth/enable2fa" method="post">
+            <button class="btn btn-success btn-sm" type="submit">Enable</button>
+          </form>
+          <% } %>
+        </div>
+        <div class="col-6 d-flex justify-content-between">
+          Change Password
+          <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Change Password
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- ! MODAL START -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Change Password</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="changepwd">
+              <label for="current" class="form-label">Current Password:</label>
+              <input type="password" name="current" id="current" class="form-control">
+              <label for="new" class="form-label">New Password:</label>
+              <input type="password" name="new" id="new" class="form-control">
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button id="modalCancel" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button id="modalChange" type="button" class="btn btn-warning">Change</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ! MODAL END -->
+    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/axios/axios.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"
+      integrity="sha512-lOrm9FgT1LKOJRUXF3tp6QaMorJftUjowOWiDcG5GFZ/q7ukof19V0HKx/GWzXCdt9zYju3/KhBNdCLzK8b90Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      const err = '<%= errorMsg %>';
+      if (err.length > 0) {
+        new Noty({
+          type: 'warning',
+          theme: 'metroui',
+          text: err,
+          timeout: 3000,
+        }).show();
+      }
+
+      const totpErr = '<%= totperror %>'
+      if (totpErr.length > 0) {
+        new Noty({
+          type: 'warning',
+          theme: 'metroui',
+          text: totpErr,
+          timeout: 3000,
+        }).show();
+      }
+
+      const img = document.getElementById('uploaded');
+      function displayImg(inp) {
+        if (inp.files && inp.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            // $('#uploaded').attr('src', e.target.result).width(300).height(300);
+            img.setAttribute('src', e.target.result);
+          };
+          reader.readAsDataURL(inp.files[0]);
+        }
+      }
+
+      const disable2faButton = document.getElementById('disable2fa')
+      if (disable2faButton) {
+        const id = '<%= user._id %>'
+        disable2faButton.addEventListener('click',(e)=>{
+          e.preventDefault();
+          axios.post('/auth/disable2fa').then((res)=>{
+            new Noty({
+            type: 'success',
+            theme: 'metroui',
+            text: '2FA Disabled, Please Reload Page',
+            timeout: 3000,
+          }).show();
+          }).catch((e)=>{
+            new Noty({
+            type: 'warning',
+            theme: 'metroui',
+            text: 'Error Occured',
+            timeout: 3000,
+          }).show();
+          });
+        })
+      }
+    
+      const passForm = document.getElementById('changepwd')
+      
+      const modalChangeBtn = document.getElementById('modalChange')
+      const modalCancelBtn = document.getElementById('modalCancel')
+
+      modalChangeBtn.addEventListener('click',(e)=>{
+        e.preventDefault();
+        const oldPwd = passForm.current.value
+        const newPwd = passForm.new.value
+        axios.post('/async/changepwd',{
+          oldPwd,
+          newPwd
+        })
+        .then((res)=>{
+          modalCancelBtn.click();
+          if (res.data.change) {
+              new Noty({
+              type: 'success',
+              theme: 'metroui',
+              text: 'Password Changed Successfully',
+              timeout: 3000,
+            }).show();
+          }else{
+            new Noty({
+              type: 'warning',
+              theme: 'metroui',
+              text: 'Could Not Change Password, Try Again !!!',
+              timeout: 3000,
+            }).show();
+          }
+        })
+        .catch((e)=>{
+          modalCancelBtn.click();
+          new Noty({
+              type: 'warning',
+              theme: 'metroui',
+              text: 'Could Not Change Password, Try Again !!!',
+              timeout: 3000,
+            }).show();
+        })
+      });
+
+    </script>
+  </body>
+</html>

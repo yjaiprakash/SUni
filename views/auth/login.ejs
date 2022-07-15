@@ -1,0 +1,98 @@
+<%- include('./../partials/upper.ejs',{title:'login'}) %>
+  <link rel="stylesheet" href="/assets/css/login.css" />
+  </head>
+  <body>
+    <%-include('./../partials/navbar.ejs')%>
+    <br />
+    <div class="container">
+      <% if(success){ %>
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Account created successfully, Please check you email to verify your
+        account
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <% } %><% if(notFound){ %>
+      <div
+        class="alert alert-danger alert-dismissible fade show text-center"
+        role="alert"
+      >
+        <strong>Account Not Found !!!</strong> Please
+        <a href="/auth/signup" class="alert-link">Sign Up</a> here
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <% } %> <% if(invalid){ %>
+      <div
+        class="alert alert-danger alert-dismissible fade show text-center"
+        role="alert"
+      >
+        <strong>Invalid email or password</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <% } %><%if(msg.length>0){%>
+      <div
+        class="alert alert-warning alert-dismissible fade show text-center"
+        role="alert"
+      >
+        <strong><%= msg %></strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <%}%>
+    </div>
+    <div class="container loginFormContainer" id="loginForm">
+      <form action="/auth/login" method="POST">
+        <div class="container-fluid">
+          <div>
+            <span class="login_img"><img src="../../assets/img/auth/login.svg" alt=""></span>
+            <label for="email" class="form-label">Email or Username</label>
+            <input
+              type="text"
+              name="email"
+              class="form-control"
+              id="email"
+              required
+            />
+          </div>
+          <div>
+            <label for="password" class="form-label">Password</label>
+            <input
+              type="password"
+              name="password"
+              class="form-control"
+              id="password"
+              required
+            />
+          </div>
+        </div>
+
+        <br />
+        <div class="container-fluid d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary">Log In</button>
+          <a href="/auth/forgotpassword" class="btn btn-outline-warning"
+            >Forgot Password</a
+          >
+        </div>
+      </form>
+    </div>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

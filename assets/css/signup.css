@@ -1,0 +1,33 @@
+#signupForm {
+  border: 2px solid #5e5e5e;
+  padding: 1.5rem;
+  border-radius: 25px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: auto;
+  margin-top: 5vh;
+}
+
+#signupForm .signup_img {
+  border-right: 0.2vw solid blue;
+  width: 50%;
+}
+
+#signupForm .signup_img img {
+  width: 80%;
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+}
+
+#signupForm .container-fluid {
+  padding-left: 8vw;
+  font-size: large;
+  font-weight: bold;
+}
+
+#signupForm .container-fluid .row {
+  padding-top: 10px;
+}
+/*# sourceMappingURL=signup.css.map */

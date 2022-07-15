@@ -1,0 +1,69 @@
+<%- include('./../partials/upper.ejs',{title:'New Post'}) %>
+<link rel="stylesheet" href="/assets/css/posts/addpost.css" />
+</head>
+  <!-- <body style="background-color: rgba(255, 255, 255, 0.7)"> -->
+  <body>
+    <%- include('./../partials/navbar2.ejs') %>
+
+    <main>
+      <div class="container mt-2">
+        <div class="row" style="margin-top: 5vh;">
+          <div class="col-md-7 postside">
+            <form action="/new" method="post" enctype="multipart/form-data">
+              <!-- <label for="image" class="form-label"><h4>Image</h4></label><br /> -->
+              <input
+                type="file"
+                name="image"
+                id="image"
+                onchange="displayImg(this)"
+                class="form-control"
+                required
+              />
+              <br />
+              <div class="form-floating">
+                <textarea
+                  class="form-control"
+                  placeholder="Image Caption"
+                  id="caption"
+                  name="caption"
+                  style="height: 59vh; width: 100%; resize: none"
+                  maxlength="1000"
+                  required
+                ></textarea>
+                <label for="floatingTextarea2">Caption</label>
+              </div>
+              <br />
+              <div>
+                <button type="submit" class="btn btn-info">Post</button>
+              </div>
+            </form>
+          </div>
+          <div class="col-md-5 previewside">
+            <h3>Image Preview</h3>
+            <img
+              src="/assets/img/sys/a.jpg"
+              alt="uploadedImg"
+              style="width: 100%; object-fit: cover; margin-top: 10vh;"
+              id="uploaded"
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      const img = document.getElementById('uploaded');
+      function displayImg(inp) {
+        if (inp.files && inp.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            // $('#uploaded').attr('src', e.target.result).width(300).height(300);
+            img.setAttribute('src', e.target.result);
+          };
+          reader.readAsDataURL(inp.files[0]);
+        }
+      }
+    </script>
+    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

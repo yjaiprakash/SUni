@@ -1,0 +1,28 @@
+#signupForm {
+    border: 2px solid rgb(94, 94, 94);
+    padding: 1.5rem;
+    border-radius: 25px;
+    display: flex;
+    margin: auto;
+    margin-top: 5vh;
+    .signup_img
+    {
+        border-right: 0.2vw solid blue;
+        width: 50%;
+        img 
+        {
+            width: 80%;
+            max-width: fit-content;
+        }
+    }
+    .container-fluid
+    {
+        padding-left: 8vw;
+        font-size: large;
+        font-weight: bold;
+        .row
+        {
+            padding-top: 10px;
+        }
+    }
+  }
